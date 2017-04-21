@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>timers</title>
+    <style type="text/css">
+    canvas {
+        background-color: #ccc;
+    }
+    </style>
+</head>
+
+<body>
+    <h3>Set Interval</h3>
+    <canvas id="setInterval" width="800" height="100"></canvas>
+    <h3>Set Timeout</h3>
+    <canvas id="setTimeout" width="800" height="100"></canvas>
+    <h3>Request Animation Frame</h3>
+    <canvas id="raf" width="800" height="100"></canvas>
+    <h3>keyboard</h3>
+    <canvas id="kb" width="800" height="100"></canvas>
+
+    <p>Canvas is just creating an HTML5 element where you can paint the pixels. It creates an area that is just like the Processing sketches you make in programming class. Points to remember when working with canvas:
+    <ul>
+    	<li>all drawing methods for canvas refer to the context of the canvas. Canvas is the HTML element. Context is the contents (pixels) of the context.</li>
+    	<li>clearRect(x,y,w,h); is how you clear the pixels of the canvas. You can specify the amount (w,h) of the area you wish to clear, though you most often will just specify the full width and height of the canvas.</li>
+    	<li>read the documentation on canvas on MDN for insight on how to use canvas.</li>
+    </ul></p>
+    <p>Timers are old technology in javascript. Read the documentation for details on how to implement. The basic difference is the setInterval runs until you can clearInterval, while setTimeout runs once. Interval continuous, timeout once. Done.</p>
+    <p>RequestAnimationFrame runs very much like setTimeout. It has to be recalled each time it runs. The BIGGEST advantage is that it will throttle itself when the window is not active, thus preserving system resources when the page is not in focus.</p>
+    <p>Keyboard events you already know. For moving sprites, it is much like using Processing where the tracking of the keys is to booleans. One of the links leads to an object way if you want to take it up a notch.</p>
+	<h2>links</h2>
+	<h3>canvas</h3>
+	<p><a href="https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial">https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial</a></p>
+	<h3>timers</h3>
+	<p><a href="http://www.w3schools.com/js/js_timing.asp">http://www.w3schools.com/js/js_timing.asp</a></p>
+	<h3>request animation frame</h3>
+	<p><a href="https://developer.mozilla.org/en-US/docs/Web/API/window/requestAnimationFrame">https://developer.mozilla.org/en-US/docs/Web/API/window/requestAnimationFrame</a></p>
+	<h3>keyboard events</h3>
+	<p><a href="http://www.w3schools.com/jsref/event_key_keycode.asp">http://www.w3schools.com/jsref/event_key_keycode.asp</a></p>
+	<p><a href=""></a></p>
+	<p><a href="http://www.kirupa.com/html5/keyboard_events_in_javascript.htm">http://www.kirupa.com/html5/keyboard_events_in_javascript.htm</a></p>
+	<p><a href="http://www.siteforinfotech.com/2015/10/how-to-handle-keyboard-event-in-JavaScript.html">http://www.siteforinfotech.com/2015/10/how-to-handle-keyboard-event-in-JavaScript.html</a></p>
+	<p><a href="http://nokarma.org/2011/02/27/javascript-game-development-keyboard-input/">http://nokarma.org/2011/02/27/javascript-game-development-keyboard-input/ /br this presents a more advanced and optimized version of working with key events through objects. If you examine it in detail and research the concepts presented, it can lead to a more efficient way to code the keyboard.</a></p>
+<h3>Creating code like classes</h3>
+<p>Each of the following pages create the same result. Each implements class like code differently.</p>
+<p><a href="kindaLikeClasses.html">version zero</a></p>
+<p><a href="kindaLikeClasses.html">version one</a></p>
+<p><a href="kindaLikeClasses.html">version two</a></p>
+
+    <script type="text/javascript">
+    var ctx1 = document.getElementById('setInterval').getContext('2d');
+    var ctx2 = document.getElementById('setTimeout').getContext('2d');
+    var ctx3 = document.getElementById('raf').getContext('2d');
+    var ctx4 = document.getElementById('kb').getContext('2d');
+    var guyImage = new Image();
+    guyImage.src = "guy.png";
+    var x1, x2, x3;
+    var y, w, h;
+    var speedX1, speedX2, speedX3;
+    var score1, score2, score3;
+    x1 = 0;
+    x2 = 0;
+    x3 = 0;
+    y = 10;
+    w = 72;
+    h = 80;
+    speedX1 = 20;
+    speedX2 = 20;
+    speedX3 = 20;
+    score1 = 0;
+    score2 = 0;
+    score3 = 0;
+    guyImage.addEventListener('load', startLoops, false);
+
+    function startLoops() {
+        timeoutLoop();
+        setInterval(intervalLoop, 1000 / 60);
+        window.requestAnimationFrame(rafLoop);
+        window.requestAnimationFrame(keyLoop);
+    }
+
+    function timeoutLoop() {
+        ctx1.clearRect(0, 0, 800, 100);
+        ctx1.drawImage(guyImage, x1, y, w, h);
+        x1 += speedX1;
+        if (x1 > 800 - w || x1 < 0) {
+            speedX1 *= -1;
+            score1++;
+        }
+        ctx1.fillText(score1, 5, 15);
+        setTimeout(timeoutLoop, 1000 / 60);
+
+    }
+
+    function intervalLoop() {
+        ctx2.clearRect(0, 0, 800, 100);
+        ctx2.drawImage(guyImage, x2, y, w, h);
+        x2 += speedX2;
+        if (x2 > 800 - w || x2 < 0) {
+            speedX2 *= -1;
+            score2++;
+        }
+        ctx2.fillText(score2, 5, 15);
+        // setTimeout(loop,1000/60);
+    }
+
+    function rafLoop() {
+        ctx3.clearRect(0, 0, 800, 100);
+        ctx3.drawImage(guyImage, x3, y, w, h);
+        x3 += speedX3;
+        if (x3 > 800 - w || x3 < 0) {
+            speedX3 *= -1;
+            score3++;
+        }
+        ctx3.fillText(score3, 5, 15);
+        window.requestAnimationFrame(rafLoop);
+    }
+
+
+    var xpos = 100;
+    var ypos = 0;
+    var left = false;
+    var right = false
+    var up = false;
+    var down = false;
+
+    window.addEventListener("keydown", kd, false);
+    window.addEventListener("keyup", ku, false);
+    document.getElementById('kb').focus();
+    function kd(e) {
+    	e.preventDefault();
+        switch (e.keyCode) {
+            case 37:
+                // left key pressed
+                left = true;
+                break;
+            case 38:
+                // up key pressed
+                up = true;
+                break;
+            case 39:
+                // right key pressed
+                right = true;
+                break;
+            case 40:
+                // down key pressed
+                down = true;
+                break;
+        }
+    }
+
+    function ku(e) {
+    	e.preventDefault();
+        switch (e.keyCode) {
+            case 37:
+                // left key pressed
+                left = false;
+                break;
+            case 38:
+                // up key pressed
+                up = false;
+                break;
+            case 39:
+                // right key pressed
+                right = false;
+                break;
+            case 40:
+                // down key pressed
+                down = false;
+                break;
+        }
+    }
+
+    function keyLoop() {
+        if (left) {
+            xpos -= 5;
+        }
+        if (right) {
+            xpos += 5;
+        }
+        if (up) {
+            ypos -= 5;
+        }
+        if (down) {
+            ypos += 5;
+        }
+        ctx4.clearRect(0, 0, 800, 100);
+        ctx4.drawImage(guyImage, xpos, ypos, w, h);
+        window.requestAnimationFrame(keyLoop);
+    }
+    </script>
+</body>
+
+</html>

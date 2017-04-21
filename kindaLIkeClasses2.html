@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>classes before there were classes 2</title>
+    <style media="screen">
+      body{
+        background-color: #999;
+      }
+      canvas{
+        background-color: #333;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="canvas" width="600" height="600"></canvas>
+    <script type="text/javascript">
+      var ctx = document.getElementById('canvas').getContext('2d');
+      var zombieImage = new Image();
+      zombieImage.src = "guy.png";
+
+      //zombie class
+      var Zombie={
+        x: 0,
+        y: 0,
+        w: 72,
+        h: 80,
+        speedX: 4,
+        speedY: 0,
+        scaleFactor: 0,
+        spawn: function(){
+          this.x = Math.random()*500;
+          this.y = Math.random()*300;
+          this.scaleFactor = Math.random()+0.3;
+        },
+        update: function(){
+          this.x += this.speedX;
+          if (this.x > 600-this.w*this.scaleFactor || this.x<0){
+            this.speedX *= -1;
+          }
+          this.y += this.speedY;
+        },
+
+        display: function(){
+          ctx.drawImage(zombieImage,
+              0, 0, this.w, this.h,
+              this.x, this.y, this.w * this.scaleFactor, this.h * this.scaleFactor);
+          }
+      }//end zombie class
+
+      var z1 = Object.create(Zombie);
+      var z2 = Object.create(Zombie);
+      z1.spawn();
+      z2.spawn();
+
+      function rafLoop() {
+          ctx.clearRect(0, 0, 600, 600);
+          z1.update();
+          z2.update();
+          z1.display();
+          z2.display();
+          window.requestAnimationFrame(rafLoop);
+      }//end rafLoop
+
+      window.requestAnimationFrame(rafLoop);
+
+
+    </script>
+  </body>
+</html>
